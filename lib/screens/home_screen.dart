@@ -54,11 +54,7 @@ class _homeScreenState extends State<homeScreen> {
     super.initState();
   }
 
-  final ApiService apiService = ApiService(
-    apiKey: 'e72c05246bmsh41091605a84bc8ep10028cjsna2db09285406',
-    apiUrl:
-        'https://google-translate1.p.rapidapi.com/language/translate/v2/languages',
-  );
+  final ApiService apiService = ApiService();
   Future getData() async {
     try {
       final responseData = await apiService.getData();
@@ -119,7 +115,6 @@ class _homeScreenState extends State<homeScreen> {
                     ],
                   ),
                 ),
-
                 Container(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -144,8 +139,8 @@ class _homeScreenState extends State<homeScreen> {
                                     ));
                           },
                           child: Container(
-                            height: size.height * 0.06,
-                            width: size.width * 0.3,
+                            height: size.height * 0.08,
+                            width: size.width * 0.35,
                             decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(15)),
@@ -198,8 +193,8 @@ class _homeScreenState extends State<homeScreen> {
                                     ));
                           },
                           child: Container(
-                            height: size.height * 0.06,
-                            width: size.width * 0.3,
+                            height: size.height * 0.08,
+                            width: size.width * 0.35,
                             decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(15)),
@@ -253,23 +248,6 @@ class _homeScreenState extends State<homeScreen> {
                         color: Color(0xff72767a)),
                   ),
                 ),
-                //
-                // Container(
-                //   height: size.height * 0.15,
-                //   width: size.width * 0.8,
-                //   decoration: BoxDecoration(
-                //       color: Colors.black,
-                //       borderRadius: BorderRadius.circular(10),
-                //       border: Border.all(color: Color(0xff72767a))),
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: AutoSizeText(
-                //       "$outputText",
-                //       style: TextStyle(color: Colors.white, fontSize: 18),
-                //       maxLines: 5,
-                //     ),
-                //   ),
-                // )
                 Container(
                   child: CustomTextField(
                     controller: txt2,

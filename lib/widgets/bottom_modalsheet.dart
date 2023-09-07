@@ -22,9 +22,9 @@ class bottomModalSheet extends StatefulWidget {
 }
 
 class _bottomModalSheetState extends State<bottomModalSheet> {
+  var items;
   @override
   Widget build(BuildContext context) {
-    //print(widget.resp);
     var size = MediaQuery.of(context).size;
     return FutureBuilder(
         future: ApiService().getData(),
@@ -64,10 +64,8 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
                                 itemBuilder: (context, index) {
                                   final language = widget.resp['data']
                                       ['languages'][index]['code'];
-                                  // print("hereee $language");
                                   final languageName =
                                       LanguageData.languageMap[language];
-                                  //print("hereee $languageName");
                                   return GestureDetector(
                                       onTap: () {
                                         widget.onLanguageSelected(
