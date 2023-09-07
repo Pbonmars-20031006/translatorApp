@@ -5,7 +5,7 @@ import '../themes/language_data.dart';
 
 class customCard extends StatelessWidget {
   customCard({Key? key, required this.title}) : super(key: key);
-  final String title;
+  final String? title;
   @override
   Widget build(BuildContext context) {
     return Padding(

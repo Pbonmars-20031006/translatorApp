@@ -4,6 +4,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     required this.onChanged,
+    required this.onTextChanged,
     this.autofocus = false,
     this.validator,
     this.label = '',
@@ -128,8 +129,11 @@ class CustomTextField extends StatelessWidget {
           },
           onChanged: (value) {
             onChanged(value);
+            onTextChanged(value);
           },
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus),
     );
   }
+
+  final Function(String) onTextChanged;
 }

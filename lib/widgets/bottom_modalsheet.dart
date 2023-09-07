@@ -22,7 +22,7 @@ class bottomModalSheet extends StatefulWidget {
 class _bottomModalSheetState extends State<bottomModalSheet> {
   @override
   Widget build(BuildContext context) {
-    print(widget.resp);
+    //print(widget.resp);
     return Container(
         decoration: BoxDecoration(color: Colors.black),
         child: Padding(
@@ -34,8 +34,10 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     final language =
-                        widget.resp['data']['languages'][index]['language'];
+                        widget.resp['data']['languages'][index]['code'];
+                    // print("hereee $language");
                     final languageName = LanguageData.languageMap[language];
+                    //print("hereee $languageName");
                     return GestureDetector(
                         onTap: () {
                           widget.onLanguageSelected(languageName!, language);
@@ -43,7 +45,7 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
                         },
                         child: customCard(
                             title: widget.resp['data']['languages'][index]
-                                ['language']));
+                                ['code']));
                   },
                   itemCount: widget.resp['data']['languages'].length,
                 ))));

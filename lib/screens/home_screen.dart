@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:translator2/widgets/bottom_modalsheet.dart';
 import 'package:translator2/widgets/customTextField.dart';
 import 'package:translator2/api/apis.dart';
+import 'package:http/http.dart' as http;
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
@@ -13,10 +16,10 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<homeScreen> {
-  @override
-  String text = "";
+  String inputText = "Hello";
+  String outputText = "Hello";
   var data;
-
+  String userInput = "Hello";
   String selectedLanguage1 = "English";
   String selectedCode1 = "en";
   String selectedLanguage2 = "English";
@@ -36,6 +39,12 @@ class _homeScreenState extends State<homeScreen> {
     });
   }
 
+  void handleOutputTextChanged(String value) {
+    setState(() {
+      outputText = value;
+    });
+  }
+
   final ApiService apiService = ApiService(
     apiKey: 'e72c05246bmsh41091605a84bc8ep10028cjsna2db09285406',
     apiUrl:
@@ -43,7 +52,7 @@ class _homeScreenState extends State<homeScreen> {
   );
   Future getData() async {
     try {
-      final responseData = await apiService.getData('languages');
+      final responseData = await apiService.getData();
       setState(() {
         data = responseData;
       });
@@ -52,6 +61,19 @@ class _homeScreenState extends State<homeScreen> {
     }
   }
 
+  Future fetchData(String input) async {
+    try {
+      final responseData =
+          await apiService.fetchData(input, selectedCode1, selectedCode2);
+      setState(() {
+        outputText = responseData;
+      });
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
@@ -60,13 +82,19 @@ class _homeScreenState extends State<homeScreen> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
           child: Column(children: [
-            CustomTextField(
-              borderCurve: 20,
-              onChanged: (String value) {
-                setState(() {
-                  text = value;
-                });
-              },
+            Container(
+              child: AutoSizeText(
+                "Text Translation",
+                style: TextStyle(
+                    fontFamily: "nunito",
+                    fontSize: 18,
+                    color: Color(0xff72767a)),
+              ),
+            ),
+            Divider(
+              color: Color(0xff72767a),
+              thickness: 1,
+              indent: size.width * 0.01,
             ),
             Container(
               child:
@@ -149,6 +177,51 @@ class _homeScreenState extends State<homeScreen> {
                   ),
                 ),
               ]),
+            ),
+            AutoSizeText(
+              "Translate from $selectedLanguage1",
+              style: TextStyle(
+                  fontFamily: "nunito", fontSize: 18, color: Color(0xff72767a)),
+            ),
+            Container(
+              child: CustomTextField(
+                onTextChanged: (String value) async {
+                  setState(() {
+                    userInput = value;
+                  });
+                  await fetchData(userInput);
+                  print(outputText);
+                },
+                initialText: inputText,
+                onChanged: (String value) {
+                  setState(() {
+                    userInput = value;
+                  });
+                },
+                maxLines: 5,
+              ),
+            ),
+            AutoSizeText(
+              "Translate to $selectedLanguage2",
+              style: TextStyle(
+                  fontFamily: "nunito", fontSize: 18, color: Color(0xff72767a)),
+            ),
+            //
+            Container(
+              // height: size.height * 0.2,
+              // width: size.width * 0.9,
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color(0xff72767a))),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AutoSizeText(
+                  "$outputText",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  maxLines: 5,
+                ),
+              ),
             )
           ]),
         ),
