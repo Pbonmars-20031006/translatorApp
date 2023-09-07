@@ -7,29 +7,6 @@ class ApiService {
 
   ApiService({this.apiKey, this.apiUrl});
 
-  // Future<dynamic> getData(String path) async {
-  //   final String url = 'https://text-translator2.p.rapidapi.com/getLanguages';
-  //   //apiUrl;
-  //   final Map<String, String> headers = {
-  //     //'Accept-Encoding': 'application/gzip',
-  //     //'X-RapidAPI-Key': apiKey,
-  //     'X-RapidAPI-Key': '3ded2c8bdfmshbe83f2e1338f87ap160047jsncf11f11d7866',
-  //     'X-RapidAPI-Host': 'text-translator2.p.rapidapi.com'
-  //   };
-
-  //   try {
-  //     final response = await http.get(Uri.parse(url), headers: headers);
-
-  //     if (response.statusCode == 200) {
-  //       final result = jsonDecode(response.body);
-  //       return result;
-  //     } else {
-  //       throw Exception('Request failed with status: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Error: $error');
-  //   }
-  // }
   Future<dynamic> getData() async {
     final url =
         Uri.parse('https://text-translator2.p.rapidapi.com/getLanguages');
@@ -80,12 +57,7 @@ class ApiService {
         final result = jsonDecode(response.body);
         final translatedText = result['data']['translatedText'];
 
-        // setState(() {
-        //   outputText = translatedText;
-        // });
         return translatedText;
-        // Update the output text field when the translated text is available
-        //handleOutputTextChanged(translatedText);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
