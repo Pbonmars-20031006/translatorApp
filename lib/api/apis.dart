@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String apiKey;
-  final String apiUrl;
+  final String? apiKey;
+  final String? apiUrl;
 
-  ApiService({required this.apiKey, required this.apiUrl});
+  ApiService({this.apiKey, this.apiUrl});
 
   // Future<dynamic> getData(String path) async {
   //   final String url = 'https://text-translator2.p.rapidapi.com/getLanguages';
@@ -35,7 +35,7 @@ class ApiService {
         Uri.parse('https://text-translator2.p.rapidapi.com/getLanguages');
 
     final headers = {
-      'X-RapidAPI-Key': '3ded2c8bdfmshbe83f2e1338f87ap160047jsncf11f11d7866',
+      'X-RapidAPI-Key': 'e72c05246bmsh41091605a84bc8ep10028cjsna2db09285406',
       'X-RapidAPI-Host': 'text-translator2.p.rapidapi.com',
     };
 
@@ -59,7 +59,7 @@ class ApiService {
 
     final headers = {
       'content-type': 'application/x-www-form-urlencoded',
-      'X-RapidAPI-Key': '3ded2c8bdfmshbe83f2e1338f87ap160047jsncf11f11d7866',
+      'X-RapidAPI-Key': 'e72c05246bmsh41091605a84bc8ep10028cjsna2db09285406',
       'X-RapidAPI-Host': 'text-translator2.p.rapidapi.com',
     };
 

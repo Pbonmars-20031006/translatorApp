@@ -29,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     this.cursorcolor,
     this.autoCorrect = false,
     this.enblsug = false,
+    required this.controller,
   }) : super(key: key);
   final Function onChanged;
   final Function? validator;
@@ -55,6 +56,7 @@ class CustomTextField extends StatelessWidget {
   final bool autoCorrect;
   final bool enblsug;
   final bool autofocus;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +70,7 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextFormField(
+          controller: controller,
           autofocus: autofocus,
           autocorrect: autoCorrect,
           enableSuggestions: enblsug,

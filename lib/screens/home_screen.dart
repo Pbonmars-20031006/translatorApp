@@ -24,7 +24,8 @@ class _homeScreenState extends State<homeScreen> {
   String selectedCode1 = "en";
   String selectedLanguage2 = "English";
   String selectedCode2 = "en";
-
+  TextEditingController txt = TextEditingController();
+  TextEditingController txt2 = TextEditingController();
   void handleLanguageSelected(String language, String code) {
     setState(() {
       selectedLanguage1 = language;
@@ -43,6 +44,14 @@ class _homeScreenState extends State<homeScreen> {
     setState(() {
       outputText = value;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    txt.text = "Hello";
+    txt2.text = "Hello";
+    super.initState();
   }
 
   final ApiService apiService = ApiService(
@@ -67,6 +76,7 @@ class _homeScreenState extends State<homeScreen> {
           await apiService.fetchData(input, selectedCode1, selectedCode2);
       setState(() {
         outputText = responseData;
+        txt2.text = responseData;
       });
     } catch (error) {
       print('Error: $error');
@@ -80,22 +90,33 @@ class _homeScreenState extends State<homeScreen> {
       backgroundColor: Colors.black,
       body: Container(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
           child: Column(children: [
-            Container(
-              child: AutoSizeText(
-                "Text Translation",
-                style: TextStyle(
-                    fontFamily: "nunito",
-                    fontSize: 18,
-                    color: Color(0xff72767a)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      AutoSizeText(
+                        "Text Translation",
+                        style: TextStyle(
+                            fontFamily: "nunito",
+                            fontSize: 18,
+                            color: Color(0xff72767a)),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Color(0xff72767a),
+                    thickness: 1,
+                    indent: size.width * 0.01,
+                  ),
+                ],
               ),
             ),
-            Divider(
-              color: Color(0xff72767a),
-              thickness: 1,
-              indent: size.width * 0.01,
-            ),
+
             Container(
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -103,6 +124,8 @@ class _homeScreenState extends State<homeScreen> {
                   onTap: () async {
                     await getData();
                     showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        enableDrag: true,
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
@@ -134,11 +157,16 @@ class _homeScreenState extends State<homeScreen> {
                     onPressed: () {
                       String tempLang = selectedLanguage1;
                       String tempCode = selectedCode1;
+                      String tempText = txt.text;
                       setState(() {
                         selectedCode1 = selectedCode2;
                         selectedLanguage1 = selectedLanguage2;
                         selectedCode2 = tempCode;
                         selectedLanguage2 = tempLang;
+                        userInput = outputText;
+                        txt.text = txt2.text;
+                        txt2.text = tempText;
+                        //outputText = tempText;
                       });
                     },
                     icon: Icon(
@@ -149,6 +177,8 @@ class _homeScreenState extends State<homeScreen> {
                   onTap: () async {
                     await getData();
                     showModalBottomSheet(
+                        enableDrag: true,
+                        backgroundColor: Colors.transparent,
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
@@ -156,7 +186,7 @@ class _homeScreenState extends State<homeScreen> {
                               BorderRadius.vertical(top: Radius.circular(30)),
                         ),
                         builder: (context) => bottomModalSheet(
-                              tittle: "From",
+                              tittle: "To",
                               resp: data,
                               onLanguageSelected: handleLanguageSelected2,
                             ));
@@ -178,21 +208,27 @@ class _homeScreenState extends State<homeScreen> {
                 ),
               ]),
             ),
-            AutoSizeText(
-              "Translate from $selectedLanguage1",
-              style: TextStyle(
-                  fontFamily: "nunito", fontSize: 18, color: Color(0xff72767a)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: AutoSizeText(
+                "Translate from $selectedLanguage1",
+                style: TextStyle(
+                    fontFamily: "nunito",
+                    fontSize: 18,
+                    color: Color(0xff72767a)),
+              ),
             ),
             Container(
               child: CustomTextField(
+                controller: txt,
                 onTextChanged: (String value) async {
                   setState(() {
-                    userInput = value;
+                    userInput = txt.text;
                   });
                   await fetchData(userInput);
                   print(outputText);
                 },
-                initialText: inputText,
+                //initialText: inputText,
                 onChanged: (String value) {
                   setState(() {
                     userInput = value;
@@ -201,28 +237,52 @@ class _homeScreenState extends State<homeScreen> {
                 maxLines: 5,
               ),
             ),
-            AutoSizeText(
-              "Translate to $selectedLanguage2",
-              style: TextStyle(
-                  fontFamily: "nunito", fontSize: 18, color: Color(0xff72767a)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: AutoSizeText(
+                "Translate to $selectedLanguage2",
+                style: TextStyle(
+                    fontFamily: "nunito",
+                    fontSize: 18,
+                    color: Color(0xff72767a)),
+              ),
             ),
             //
+            // Container(
+            //   height: size.height * 0.15,
+            //   width: size.width * 0.8,
+            //   decoration: BoxDecoration(
+            //       color: Colors.black,
+            //       borderRadius: BorderRadius.circular(10),
+            //       border: Border.all(color: Color(0xff72767a))),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: AutoSizeText(
+            //       "$outputText",
+            //       style: TextStyle(color: Colors.white, fontSize: 18),
+            //       maxLines: 5,
+            //     ),
+            //   ),
+            // )
             Container(
-              // height: size.height * 0.2,
-              // width: size.width * 0.9,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xff72767a))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  "$outputText",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                  maxLines: 5,
-                ),
+              child: CustomTextField(
+                controller: txt2,
+                onTextChanged: (String value) async {
+                  setState(() {
+                    outputText = txt2.text;
+                  });
+                  await fetchData(outputText);
+                  print(inputText);
+                },
+                //initialText: inputText,
+                onChanged: (String value) {
+                  setState(() {
+                    userInput = value;
+                  });
+                },
+                maxLines: 5,
               ),
-            )
+            ),
           ]),
         ),
       ),

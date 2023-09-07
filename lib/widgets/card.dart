@@ -8,17 +8,20 @@ class customCard extends StatelessWidget {
   final String? title;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         height: 50,
-        width: 100,
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.07)),
+        width: size.width * 0.1,
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.07),
+            borderRadius: BorderRadius.circular(20)),
         child: Center(
           child: AutoSizeText(
             "${LanguageData.languageMap['$title']}",
             style: TextStyle(
-                color: Colors.white, fontFamily: 'nunito', fontSize: 25),
+                color: Colors.white, fontFamily: 'nunito', fontSize: 15),
           ),
         ),
       ),
