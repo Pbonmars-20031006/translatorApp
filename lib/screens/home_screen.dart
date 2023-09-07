@@ -91,199 +91,207 @@ class _homeScreenState extends State<homeScreen> {
       body: Container(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      AutoSizeText(
-                        "Text Translation",
-                        style: TextStyle(
-                            fontFamily: "nunito",
-                            fontSize: 18,
-                            color: Color(0xff72767a)),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Center(
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          AutoSizeText(
+                            "Text Translation",
+                            style: TextStyle(
+                                fontFamily: "nunito",
+                                fontSize: 18,
+                                color: Color(0xff72767a)),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Color(0xff72767a),
+                        thickness: 1,
+                        indent: size.width * 0.01,
                       ),
                     ],
                   ),
-                  Divider(
-                    color: Color(0xff72767a),
-                    thickness: 1,
-                    indent: size.width * 0.01,
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            Container(
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                GestureDetector(
-                  onTap: () async {
-                    await getData();
-                    showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        enableDrag: true,
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(30)),
+                Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            await getData();
+                            showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                enableDrag: true,
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
+                                ),
+                                builder: (context) => bottomModalSheet(
+                                      tittle: "From",
+                                      resp: data,
+                                      onLanguageSelected:
+                                          handleLanguageSelected,
+                                    ));
+                          },
+                          child: Container(
+                            height: size.height * 0.06,
+                            width: size.width * 0.3,
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: AutoSizeText(
+                                "$selectedLanguage1",
+                                style: TextStyle(
+                                    color: Colors.white, fontFamily: "nunito"),
+                              ),
+                            ),
+                          ),
                         ),
-                        builder: (context) => bottomModalSheet(
-                              tittle: "From",
-                              resp: data,
-                              onLanguageSelected: handleLanguageSelected,
-                            ));
-                  },
-                  child: Container(
-                    height: size.height * 0.06,
-                    width: size.width * 0.3,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: AutoSizeText(
-                        "$selectedLanguage1",
-                        style: TextStyle(
-                            color: Colors.white, fontFamily: "nunito"),
-                      ),
-                    ),
+                        IconButton(
+                            onPressed: () {
+                              String tempLang = selectedLanguage1;
+                              String tempCode = selectedCode1;
+                              String tempText = txt.text;
+                              setState(() {
+                                selectedCode1 = selectedCode2;
+                                selectedLanguage1 = selectedLanguage2;
+                                selectedCode2 = tempCode;
+                                selectedLanguage2 = tempLang;
+                                userInput = outputText;
+                                txt.text = txt2.text;
+                                txt2.text = tempText;
+                                //outputText = tempText;
+                              });
+                            },
+                            icon: Icon(
+                              FontAwesomeIcons.repeat,
+                              color: Color(0xff72767a),
+                            )),
+                        GestureDetector(
+                          onTap: () async {
+                            await getData();
+                            showModalBottomSheet(
+                                enableDrag: true,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
+                                ),
+                                builder: (context) => bottomModalSheet(
+                                      tittle: "To",
+                                      resp: data,
+                                      onLanguageSelected:
+                                          handleLanguageSelected2,
+                                    ));
+                          },
+                          child: Container(
+                            height: size.height * 0.06,
+                            width: size.width * 0.3,
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: AutoSizeText(
+                                "$selectedLanguage2",
+                                style: TextStyle(
+                                    color: Colors.white, fontFamily: "nunito"),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: AutoSizeText(
+                    "Translate from $selectedLanguage1",
+                    style: TextStyle(
+                        fontFamily: "nunito",
+                        fontSize: 18,
+                        color: Color(0xff72767a)),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      String tempLang = selectedLanguage1;
-                      String tempCode = selectedCode1;
-                      String tempText = txt.text;
+                Container(
+                  child: CustomTextField(
+                    controller: txt,
+                    onTextChanged: (String value) async {
                       setState(() {
-                        selectedCode1 = selectedCode2;
-                        selectedLanguage1 = selectedLanguage2;
-                        selectedCode2 = tempCode;
-                        selectedLanguage2 = tempLang;
-                        userInput = outputText;
-                        txt.text = txt2.text;
-                        txt2.text = tempText;
-                        //outputText = tempText;
+                        userInput = txt.text;
+                      });
+                      await fetchData(userInput);
+                      print(outputText);
+                    },
+                    //initialText: inputText,
+                    onChanged: (String value) {
+                      setState(() {
+                        userInput = value;
                       });
                     },
-                    icon: Icon(
-                      FontAwesomeIcons.repeat,
-                      color: Color(0xff72767a),
-                    )),
-                GestureDetector(
-                  onTap: () async {
-                    await getData();
-                    showModalBottomSheet(
-                        enableDrag: true,
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(30)),
-                        ),
-                        builder: (context) => bottomModalSheet(
-                              tittle: "To",
-                              resp: data,
-                              onLanguageSelected: handleLanguageSelected2,
-                            ));
-                  },
-                  child: Container(
-                    height: size.height * 0.06,
-                    width: size.width * 0.3,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: AutoSizeText(
-                        "$selectedLanguage2",
-                        style: TextStyle(
-                            color: Colors.white, fontFamily: "nunito"),
-                      ),
-                    ),
+                    maxLines: 5,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: AutoSizeText(
+                    "Translate to $selectedLanguage2",
+                    style: TextStyle(
+                        fontFamily: "nunito",
+                        fontSize: 18,
+                        color: Color(0xff72767a)),
+                  ),
+                ),
+                //
+                // Container(
+                //   height: size.height * 0.15,
+                //   width: size.width * 0.8,
+                //   decoration: BoxDecoration(
+                //       color: Colors.black,
+                //       borderRadius: BorderRadius.circular(10),
+                //       border: Border.all(color: Color(0xff72767a))),
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: AutoSizeText(
+                //       "$outputText",
+                //       style: TextStyle(color: Colors.white, fontSize: 18),
+                //       maxLines: 5,
+                //     ),
+                //   ),
+                // )
+                Container(
+                  child: CustomTextField(
+                    controller: txt2,
+                    onTextChanged: (String value) async {
+                      setState(() {
+                        outputText = txt2.text;
+                      });
+                      await fetchData(outputText);
+                      print(inputText);
+                    },
+                    //initialText: inputText,
+                    onChanged: (String value) {
+                      setState(() {
+                        userInput = value;
+                      });
+                    },
+                    maxLines: 5,
                   ),
                 ),
               ]),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              child: AutoSizeText(
-                "Translate from $selectedLanguage1",
-                style: TextStyle(
-                    fontFamily: "nunito",
-                    fontSize: 18,
-                    color: Color(0xff72767a)),
-              ),
-            ),
-            Container(
-              child: CustomTextField(
-                controller: txt,
-                onTextChanged: (String value) async {
-                  setState(() {
-                    userInput = txt.text;
-                  });
-                  await fetchData(userInput);
-                  print(outputText);
-                },
-                //initialText: inputText,
-                onChanged: (String value) {
-                  setState(() {
-                    userInput = value;
-                  });
-                },
-                maxLines: 5,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              child: AutoSizeText(
-                "Translate to $selectedLanguage2",
-                style: TextStyle(
-                    fontFamily: "nunito",
-                    fontSize: 18,
-                    color: Color(0xff72767a)),
-              ),
-            ),
-            //
-            // Container(
-            //   height: size.height * 0.15,
-            //   width: size.width * 0.8,
-            //   decoration: BoxDecoration(
-            //       color: Colors.black,
-            //       borderRadius: BorderRadius.circular(10),
-            //       border: Border.all(color: Color(0xff72767a))),
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: AutoSizeText(
-            //       "$outputText",
-            //       style: TextStyle(color: Colors.white, fontSize: 18),
-            //       maxLines: 5,
-            //     ),
-            //   ),
-            // )
-            Container(
-              child: CustomTextField(
-                controller: txt2,
-                onTextChanged: (String value) async {
-                  setState(() {
-                    outputText = txt2.text;
-                  });
-                  await fetchData(outputText);
-                  print(inputText);
-                },
-                //initialText: inputText,
-                onChanged: (String value) {
-                  setState(() {
-                    userInput = value;
-                  });
-                },
-                maxLines: 5,
-              ),
-            ),
-          ]),
+          ),
         ),
       ),
     );
